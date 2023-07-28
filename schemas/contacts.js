@@ -14,8 +14,14 @@ const addSchema = Joi.object({
     'string.pattern.base': 'Invalid phone number format. Please provide a valid phone number.',
     'any.required': 'Phone number is required. Please provide a phone number.',
   }),
+  favorite: Joi.boolean(),
 });
+
+const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required()
+})
 
 export default {
   addSchema,
+  contactUpdateFavoriteSchema,
 }; 

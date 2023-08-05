@@ -3,7 +3,10 @@ import { HttpError } from '../helpers/index.js';
 import {ctrlWrapper} from '../decorators/index.js'
 
 async function getAll(req, res) {
-    const result = await Contact.find({}, "-cratedAt -updatedAt");
+    const { _id: owner } = req.user;
+    const {page = 1, limit = 10} = req.query;
+    const skip = (page - 1) * limit;
+    const result = await Contact.find({owner}, "-cratedAt -updatedAt", {skip, limit}).populate("owner", "email subscription");
     res.json(result);
 };
 
@@ -23,7 +26,9 @@ async function add(req, res) {
         return res.status(400).json({ message: "missing required name field" });
     }
 
-    const result = await Contact.create(req.body);
+    const { _id: owner } = req.user;
+
+    const result = await Contact.create({ name, email, phone, owner });
     res.status(201).json(result);
 };
 

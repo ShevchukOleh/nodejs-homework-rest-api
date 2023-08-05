@@ -6,7 +6,7 @@ import {validateBody} from "../../decorators/index.js";
 
 import usersSchemas from "../../schemas/users-schemas.js";
 
-import {authenticate} from "../../middlewars/index.js";
+import {authenticate, upload, } from "../../middlewars/index.js";
 
 const authRouter = express.Router();
 
@@ -17,5 +17,7 @@ authRouter.post("/login", validateBody(usersSchemas.userSigninSchema), authContr
 authRouter.get("/current", authenticate, authController.getCurrent);
 
 authRouter.post("/logout", authenticate, authController.signout);
+
+authRouter.patch("/avatars", authenticate, upload.single("avatar"), authController.updateAvatar )
 
 export default authRouter;
